@@ -11,6 +11,8 @@ from numpy import ndarray
 import transformers
 from huggingface_hub import HfApi, HfFolder, Repository, hf_hub_url, cached_download
 import torch
+import torch_xla
+import torch_xla.core.xla_model as xm
 from torch import nn, Tensor, device
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
@@ -96,7 +98,8 @@ class SentenceTransformer(nn.Sequential):
             device = "cuda" if torch.cuda.is_available() else "cpu"
             logger.info("Use pytorch device: {}".format(device))
 
-        self._target_device = torch.device(device)
+        # self._target_device = torch.device(device)
+        self._target_device = xm.xla_device()
 
 
 
